@@ -200,6 +200,20 @@ export default {
     save() {
       let _this = this;
       //validation
+      if(1 != 1
+        || !Validator.length(_this.section.title, "title", 1, 50)
+        || !Validator.require(_this.section.courseId, "course_id")
+        || !Validator.require(_this.section.chapterId, "chapter_id")
+        || !Validator.require(_this.section.video, "video")
+        || !Validator.length(_this.section.video, "video", 1, 200)
+        || !Validator.require(_this.section.time, "time")
+        || !Validator.require(_this.section.charge, "charge")
+        || !Validator.require(_this.section.sort, "sort")
+        || !Validator.require(_this.section.createdAt, "created_at")
+        || !Validator.require(_this.section.updatedAt, "updated_at")
+      ) {
+        return;
+      }
 
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save',
