@@ -3,7 +3,7 @@
     <p>
       <button v-on:click="add()" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-edit"></i>
-        Add chapter
+        Add
       </button>
       &nbsp;
       <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
@@ -21,7 +21,7 @@
         <th>id</th>
         <th>name</th>
         <th>course id</th>
-        <th>action</th>
+        <th>operations</th>
       </tr>
       </thead>
 
