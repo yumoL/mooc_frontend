@@ -1,1 +1,1 @@
-CHARGE = [{key:"C", value:"chargeable"},{key:"F", value:"free"}];
+SECTION_CHARGE = {CHARGE: {key: "C", value: "chargeable"}, FREE: {key: "F", value: "free"}, }
