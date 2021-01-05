@@ -48,7 +48,7 @@
         <td>{{section.chapterId}}</td>
         <td>{{section.video}}</td>
         <td>{{section.time}}</td>
-        <td>{{section.charge}}</td>
+        <td>{{CHARGE | optionKV(section.charge)}}</td>
         <td>{{section.sort}}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
@@ -107,7 +107,9 @@
               <div class="form-group">
                 <label>charge</label>
                 <div col-sm-10>
-                  <input v-model="section.charge" class="form-control">
+                  <select v-model="section.charge" class="form-control">
+                    <option v-for="o in CHARGE" v-bind:value="o.key">{{o.value}}</option>
+                  </select>
                 </div>
               </div>
               <div class="form-group">
@@ -139,7 +141,8 @@ export default {
   data: function () {
     return {
       section: {}, //new chapter
-      sections: []
+      sections: [],
+      CHARGE: [{key:"C", value:"chargeable"},{key:"F", value:"free"}]
     }
   },
   mounted: function () {
