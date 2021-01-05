@@ -15,7 +15,7 @@
 
     <pagination ref="pagination" v-bind:list="list" v-bind:itemCount=5></pagination>
 
-    <table id="simple-table" class="table  table-bordered table-hover">
+    <table id="simple-table" class="table table-bordered table-hover">
       <thead>
       <tr>
       <th>id</th>
@@ -34,9 +34,7 @@
 
       <th>sort</th>
 
-      <th>created_at</th>
 
-      <th>updated_at</th>
       <th>operations</th>
 
       </tr>
@@ -52,8 +50,6 @@
         <td>{{section.time}}</td>
         <td>{{section.charge}}</td>
         <td>{{section.sort}}</td>
-        <td>{{section.createdAt}}</td>
-        <td>{{section.updatedAt}}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
             <button v-on:click="edit(section)" class="btn btn-xs btn-info">
@@ -78,12 +74,6 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
-              <div class="form-group">
-                <label>id</label>
-                <div col-sm-10>
-                  <input v-model="section.id" class="form-control">
-                </div>
-              </div>
               <div class="form-group">
                 <label>title</label>
                 <div col-sm-10>
@@ -124,18 +114,6 @@
                 <label>sort</label>
                 <div col-sm-10>
                   <input v-model="section.sort" class="form-control">
-                </div>
-              </div>
-              <div class="form-group">
-                <label>created_at</label>
-                <div col-sm-10>
-                  <input v-model="section.createdAt" class="form-control">
-                </div>
-              </div>
-              <div class="form-group">
-                <label>updated_at</label>
-                <div col-sm-10>
-                  <input v-model="section.updatedAt" class="form-control">
                 </div>
               </div>
             </form>
@@ -209,8 +187,6 @@ export default {
         || !Validator.require(_this.section.time, "time")
         || !Validator.require(_this.section.charge, "charge")
         || !Validator.require(_this.section.sort, "sort")
-        || !Validator.require(_this.section.createdAt, "created_at")
-        || !Validator.require(_this.section.updatedAt, "updated_at")
       ) {
         return;
       }
