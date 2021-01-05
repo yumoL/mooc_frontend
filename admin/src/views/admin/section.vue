@@ -142,7 +142,7 @@ export default {
     return {
       section: {}, //new chapter
       sections: [],
-      CHARGE: [{key:"C", value:"chargeable"},{key:"F", value:"free"}]
+      CHARGE: CHARGE
     }
   },
   mounted: function () {
