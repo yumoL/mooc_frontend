@@ -83,15 +83,15 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">course</label>
+                <label>course</label>
                 <div col-sm-10>
-                  <p class="form-control-static">{{ course.name }}</p>
+                  <p class="form-control">{{ course.name }}</p>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">chapter</label>
+                <label>chapter</label>
                 <div col-sm-10>
-                  <p class="form-control-static">{{ chapter.name }}</p>
+                  <p class="form-control">{{ chapter.name }}</p>
                 </div>
               </div>
               <div class="form-group">

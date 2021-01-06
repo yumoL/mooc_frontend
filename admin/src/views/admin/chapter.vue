@@ -74,7 +74,7 @@
               </div>
               <div class="form-group">
                 <label>course name</label>
-                <p class="form-control-static">{{course.name}}</p>
+                <p class="form-control">{{course.name}}</p>
               </div>
             </form>
           </div>
