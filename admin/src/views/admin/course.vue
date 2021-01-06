@@ -40,6 +40,7 @@
 
       <th>sort</th>
 
+
       <th>operations</th>
 
       </tr>
@@ -53,9 +54,9 @@
         <td>{{course.time}}</td>
         <td>{{course.price}}</td>
         <td>{{course.image}}</td>
-        <td>{{ COURSE_STATUS | optionKV(course.status) }}</td>
-        <td>{{ COURSE_LEVEL | optionKV(course.level) }}</td>
-        <td>{{ COURSE_CHARGE | optionKV(course.charge) }}</td>
+        <td>{{COURSE_LEVEL | optionKV(course.level)}}</td>
+        <td>{{COURSE_CHARGE | optionKV(course.charge)}}</td>
+        <td>{{COURSE_STATUS | optionKV(course.status)}}</td>
         <td>{{course.enroll}}</td>
         <td>{{course.sort}}</td>
         <td>
@@ -172,9 +173,9 @@ export default {
     return {
       course: {}, //new chapter
       courses: [],
-      COURSE_CHARGE: COURSE_CHARGE,
       COURSE_LEVEL: COURSE_LEVEL,
-      COURSE_STATUS: COURSE_STATUS
+      COURSE_CHARGE: COURSE_CHARGE,
+      COURSE_STATUS: COURSE_STATUS,
     }
   },
   mounted: function () {
