@@ -66,8 +66,8 @@
                 <input v-model="chapter.name" class="form-control" placeholder="chapter name">
               </div>
               <div class="form-group">
-                <label>course id</label>
-                <input v-model="chapter.courseId" class="form-control" placeholder="course id">
+                <label>course name</label>
+                <p class="form-control-static">{{course.name}}</p>
               </div>
             </form>
           </div>
@@ -124,7 +124,8 @@ export default {
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/chapter/list', {
         page: page,
-        size: _this.$refs.pagination.size
+        size: _this.$refs.pagination.size,
+        courseId: _this.course.id
       })
           .then((response) => {
             Loading.hide();
@@ -138,10 +139,10 @@ export default {
       let _this = this;
       //validation
       if (!Validator.require(_this.chapter.name, "chapter name")
-          || !Validator.require(_this.chapter.courseId, "course id")
           || !Validator.length(_this.chapter.courseId, "course id", 1, 8)) {
         return;
       }
+      _this.chapter.courseId = _this.course.id;
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/chapter/save',
           _this.chapter
