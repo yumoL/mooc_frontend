@@ -15,63 +15,44 @@
 
     <pagination ref="pagination" v-bind:list="list" v-bind:itemCount=5></pagination>
 
-    <table id="simple-table" class="table table-bordered table-hover">
-      <thead>
-      <tr>
-      <th>id</th>
-
-      <th>name</th>
-
-      <th>summary</th>
-
-      <th>time</th>
-
-      <th>price</th>
-
-      <th>image</th>
-
-      <th>level</th>
-
-      <th>charge</th>
-
-      <th>status</th>
-
-      <th>enroll</th>
-
-      <th>sort</th>
-
-
-      <th>operations</th>
-
-      </tr>
-      </thead>
-
-      <tbody>
-      <tr v-for="course in courses">
-        <td>{{course.id}}</td>
-        <td>{{course.name}}</td>
-        <td>{{course.summary}}</td>
-        <td>{{course.time}}</td>
-        <td>{{course.price}}</td>
-        <td>{{course.image}}</td>
-        <td>{{COURSE_LEVEL | optionKV(course.level)}}</td>
-        <td>{{COURSE_CHARGE | optionKV(course.charge)}}</td>
-        <td>{{COURSE_STATUS | optionKV(course.status)}}</td>
-        <td>{{course.enroll}}</td>
-        <td>{{course.sort}}</td>
-        <td>
-          <div class="hidden-sm hidden-xs btn-group">
-            <button v-on:click="edit(course)" class="btn btn-xs btn-info">
-              <i class="ace-icon fa fa-pencil bigger-120"></i>
-            </button>
-            <button v-on:click="del(course.id)" class="btn btn-xs btn-danger">
-              <i class="ace-icon fa fa-trash-o bigger-120"></i>
-            </button>
+    <div class="row">
+      <div v-for="course in courses" class="col-md-4">
+        <div class="thumbnail search-thumbnail">
+          <img v-show="!course.image" class="media-object" src="/static/image/demo-course.jpg"/>
+          <img v-show="course.image" class="media-object" v-bind:src="course.image"/>
+          <div class="caption">
+            <div class="clearfix">
+              <span class="pull-right label label-primary info-label">
+                <td>{{COURSE_LEVEL | optionKV(course.level)}}</td>
+              </span>
+              <span class="pull-right label label-primary info-label">
+                <td>{{COURSE_CHARGE | optionKV(course.charge)}}</td>
+              </span>
+              <span class="pull-right label label-primary info-label">
+                <td>{{COURSE_STATUS | optionKV(course.status)}}</td>
+              </span>
+            </div>
+            <h3 class="search-title">
+              <a href="#" class="blue">{{course.name}}</a>
+            </h3>
+            <p>{{course.summary}}</p>
+            <p>
+              <span class="badge badge-info">{{course.id}}</span>
+              <span class="badge badge-info">order: {{course.sort}}</span>
+              <span class="badge badge-info">duration: {{course.time}}</span>
+            </p>
+            <p>
+              <button v-on:click="edit(course)" class="btn btn-white btn-xs btn-info btn-round">
+                edit
+              </button>&nbsp;
+              <button v-on:click="del(course.id)" class="btn btn-white btn-xs btn-warning btn-round">
+                delete
+              </button>
+            </p>
           </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+        </div>
+      </div>
+    </div>
 
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
