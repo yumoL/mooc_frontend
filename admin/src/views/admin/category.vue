@@ -3,9 +3,9 @@
     <div class="row">
       <div class="col-md-6">
         <p>
-          <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+          <button v-on:click="add1()" class="btn btn-white btn-default btn-round">
             <i class="ace-icon fa fa-edit"></i>
-            Add
+            Add level1 category
           </button>
           &nbsp;
           <button v-on:click="all()" class="btn btn-white btn-default btn-round">
@@ -47,9 +47,9 @@
       </div>
       <div class="col-md-6">
         <p>
-          <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+          <button v-on:click="add2()" class="btn btn-white btn-default btn-round">
             <i class="ace-icon fa fa-edit"></i>
-            Add
+            Add level2 category
           </button>
         </p>
         <table id="level2-table" class="table table-bordered table-hover">
@@ -97,7 +97,7 @@
               <div class="form-group">
                 <label>parent</label>
                 <div col-sm-10>
-                  <input v-model="category.parent" class="form-control">
+                  <p class="form-control">{{active.name || "no parent category"}}</p>
                 </div>
               </div>
               <div class="form-group">
@@ -146,10 +146,32 @@ export default {
     _this.all();
   },
   methods: {
-    add() {
+    /**
+     * add level1 category
+     */
+    add1() {
       let _this = this;
-      _this.category = {};
+      _this.active = {};
+      _this.level2 = [];
+      _this.category = {
+        parent: "00000000"
+      };
       $("#form-modal").modal("show");
+    },
+
+    /**
+     * add level2 category
+     */
+    add2(){
+      let _this = this;
+      if(Tool.isEmpty(_this.active)){
+        Toast.warning("Please choose a parent category first");
+        return;
+      }
+      _this.category = {
+        parent: _this.active.id
+      };
+      $(".modal").modal("show");
     },
 
     edit(category) {
