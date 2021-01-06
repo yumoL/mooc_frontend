@@ -42,6 +42,9 @@
               <span class="badge badge-info">duration: {{course.time}}</span>
             </p>
             <p>
+              <button v-on:click="toChapter(course)" class="btn btn-white btn-xs btn-info btn-round">
+                chapter
+              </button>&nbsp;
               <button v-on:click="edit(course)" class="btn btn-white btn-xs btn-info btn-round">
                 edit
               </button>&nbsp;
@@ -243,6 +246,12 @@ export default {
               }
             })
       })
+    },
+
+    toChapter(course) {
+      let _this = this;
+      SessionStorage.set("course", course);
+      _this.$router.push("/business/chapter");
     }
   }
 }
