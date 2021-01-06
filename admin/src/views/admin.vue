@@ -403,6 +403,13 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
+              <li class="active" id="business-category-sidebar">
+                <router-link to="/business/category" class="dropdown-toggle">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  Category Management
+                </router-link>
+                <b class="arrow"></b>
+              </li>
               <li class="active" id="business-course-sidebar">
                 <router-link to="/business/course" class="dropdown-toggle">
                   <i class="menu-icon fa fa-caret-right"></i>

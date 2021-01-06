@@ -36,6 +36,11 @@ let optionKVArray = (list, key) => {
     }
 };
 
+/**
+ *
+ * @param value 500 (unit:second)
+ * @returns {string} 00:08:20
+ */
 let formatSecond = (value) => {
     value = value || 0;
     let second = parseInt(value, 10);
