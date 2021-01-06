@@ -1,5 +1,12 @@
 <template>
   <div>
+    <h4 class="lighter">
+      <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
+      <router-link to="/business/course" class="pink">{{course.name}}</router-link>:
+      <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
+      <router-link to="/business/chapter" class="pink">{{chapter.name}}</router-link>
+    </h4>
+    <hr>
     <p>
       <button v-on:click="add()" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-edit"></i>
@@ -22,10 +29,6 @@
 
       <th>title</th>
 
-      <th>course_id</th>
-
-      <th>chapter_id</th>
-
       <th>video</th>
 
       <th>time</th>
@@ -44,8 +47,6 @@
       <tr v-for="section in sections">
         <td>{{section.id}}</td>
         <td>{{section.title}}</td>
-        <td>{{section.courseId}}</td>
-        <td>{{section.chapterId}}</td>
         <td>{{section.video}}</td>
         <td>{{section.time}}</td>
         <td>{{ SECTION_CHARGE | optionKV(section.charge) }}</td>
@@ -81,15 +82,15 @@
                 </div>
               </div>
               <div class="form-group">
-                <label>course_id</label>
+                <label class="col-sm-2 control-label">course</label>
                 <div col-sm-10>
-                  <input v-model="section.courseId" class="form-control">
+                  <p class="form-control-static">{{course.name}}</p>
                 </div>
               </div>
               <div class="form-group">
-                <label>chapter_id</label>
+                <label class="col-sm-2 control-label">chapter</label>
                 <div col-sm-10>
-                  <input v-model="section.chapterId" class="form-control">
+                  <p class="form-control-static">{{chapter.name}}</p>
                 </div>
               </div>
               <div class="form-group">
@@ -142,12 +143,21 @@ export default {
     return {
       section: {}, //new chapter
       sections: [],
-      SECTION_CHARGE: SECTION_CHARGE
+      SECTION_CHARGE: SECTION_CHARGE,
+      course: {},
+      chapter: {}
     }
   },
   mounted: function () {
     let _this = this;
     _this.$refs.pagination.size = 5;
+    let course = SessionStorage.get("course") || {};
+    let chapter = SessionStorage.get("chapter") || {};
+    if(Tool.isEmpty(course) || Tool.isEmpty(chapter)){
+      _this.$router.push("/welcome");
+    }
+    _this.course = course;
+    _this.chapter = chapter;
     _this.list(1);
   },
   methods: {
@@ -168,7 +178,9 @@ export default {
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/list', {
         page: page,
-        size: _this.$refs.pagination.size
+        size: _this.$refs.pagination.size,
+        courseId: _this.course.id,
+        chapterId: _this.chapter.id
       })
           .then((response) => {
             Loading.hide();
@@ -183,16 +195,13 @@ export default {
       //validation
       if(1 != 1
         || !Validator.length(_this.section.title, "title", 1, 50)
-        || !Validator.require(_this.section.courseId, "course_id")
-        || !Validator.require(_this.section.chapterId, "chapter_id")
         || !Validator.require(_this.section.video, "video")
         || !Validator.length(_this.section.video, "video", 1, 200)
-        || !Validator.require(_this.section.time, "time")
-        || !Validator.require(_this.section.charge, "charge")
-        || !Validator.require(_this.section.sort, "sort")
       ) {
         return;
       }
+      _this.section.courseId = _this.course.id;
+      _this.section.chapterId = _this.chapter.id;
 
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save',
