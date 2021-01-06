@@ -2,9 +2,10 @@
   <div>
     <h4 class="lighter">
       <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
-      <router-link to="/business/course" class="pink">{{course.name}}</router-link>:
+      <router-link to="/business/course" class="pink">{{ course.name }}</router-link>
+      :
       <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
-      <router-link to="/business/chapter" class="pink">{{chapter.name}}</router-link>
+      <router-link to="/business/chapter" class="pink">{{ chapter.name }}</router-link>
     </h4>
     <hr>
     <p>
@@ -25,32 +26,32 @@
     <table id="simple-table" class="table table-bordered table-hover">
       <thead>
       <tr>
-      <th>id</th>
+        <th>id</th>
 
-      <th>title</th>
+        <th>title</th>
 
-      <th>video</th>
+        <th>video</th>
 
-      <th>time</th>
+        <th>time</th>
 
-      <th>charge</th>
+        <th>charge</th>
 
-      <th>sort</th>
+        <th>sort</th>
 
 
-      <th>operations</th>
+        <th>operations</th>
 
       </tr>
       </thead>
 
       <tbody>
       <tr v-for="section in sections">
-        <td>{{section.id}}</td>
-        <td>{{section.title}}</td>
-        <td>{{section.video}}</td>
-        <td>{{section.time}}</td>
+        <td>{{ section.id }}</td>
+        <td>{{ section.title }}</td>
+        <td>{{ section.video }}</td>
+        <td>{{ section.time | formatSecond }}</td>
         <td>{{ SECTION_CHARGE | optionKV(section.charge) }}</td>
-        <td>{{section.sort}}</td>
+        <td>{{ section.sort }}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
             <button v-on:click="edit(section)" class="btn btn-xs btn-info">
@@ -84,13 +85,13 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">course</label>
                 <div col-sm-10>
-                  <p class="form-control-static">{{course.name}}</p>
+                  <p class="form-control-static">{{ course.name }}</p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">chapter</label>
                 <div col-sm-10>
-                  <p class="form-control-static">{{chapter.name}}</p>
+                  <p class="form-control-static">{{ chapter.name }}</p>
                 </div>
               </div>
               <div class="form-group">
@@ -109,7 +110,7 @@
                 <label>charge</label>
                 <div col-sm-10>
                   <select v-model="section.charge" class="form-control">
-                    <option v-for="o in SECTION_CHARGE" v-bind:value="o.key">{{o.value}}</option>
+                    <option v-for="o in SECTION_CHARGE" v-bind:value="o.key">{{ o.value }}</option>
                   </select>
                 </div>
               </div>
@@ -153,7 +154,7 @@ export default {
     _this.$refs.pagination.size = 5;
     let course = SessionStorage.get("course") || {};
     let chapter = SessionStorage.get("chapter") || {};
-    if(Tool.isEmpty(course) || Tool.isEmpty(chapter)){
+    if (Tool.isEmpty(course) || Tool.isEmpty(chapter)) {
       _this.$router.push("/welcome");
     }
     _this.course = course;
@@ -193,10 +194,10 @@ export default {
     save() {
       let _this = this;
       //validation
-      if(1 != 1
-        || !Validator.length(_this.section.title, "title", 1, 50)
-        || !Validator.require(_this.section.video, "video")
-        || !Validator.length(_this.section.video, "video", 1, 200)
+      if (1 != 1
+          || !Validator.length(_this.section.title, "title", 1, 50)
+          || !Validator.require(_this.section.video, "video")
+          || !Validator.length(_this.section.video, "video", 1, 200)
       ) {
         return;
       }

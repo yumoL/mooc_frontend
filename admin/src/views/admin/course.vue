@@ -23,23 +23,23 @@
           <div class="caption">
             <div class="clearfix">
               <span class="pull-right label label-primary info-label">
-                <td>{{COURSE_LEVEL | optionKV(course.level)}}</td>
+                <td>{{ COURSE_LEVEL | optionKV(course.level) }}</td>
               </span>
               <span class="pull-right label label-primary info-label">
-                <td>{{COURSE_CHARGE | optionKV(course.charge)}}</td>
+                <td>{{ COURSE_CHARGE | optionKV(course.charge) }}</td>
               </span>
               <span class="pull-right label label-primary info-label">
-                <td>{{COURSE_STATUS | optionKV(course.status)}}</td>
+                <td>{{ COURSE_STATUS | optionKV(course.status) }}</td>
               </span>
             </div>
             <h3 class="search-title">
-              <a href="#" class="blue">{{course.name}}</a>
+              <a href="#" class="blue">{{ course.name }}</a>
             </h3>
-            <p>{{course.summary}}</p>
+            <p>{{ course.summary }}</p>
             <p>
-              <span class="badge badge-info">{{course.id}}</span>
-              <span class="badge badge-info">order: {{course.sort}}</span>
-              <span class="badge badge-info">duration: {{course.time}}</span>
+              <span class="badge badge-info">{{ course.id }}</span>
+              <span class="badge badge-info">order: {{ course.sort }}</span>
+              <span class="badge badge-info">duration: {{ course.time | formatSecond }}</span>
             </p>
             <p>
               <button v-on:click="toChapter(course)" class="btn btn-white btn-xs btn-info btn-round">
@@ -101,7 +101,7 @@
                 <label>level</label>
                 <div col-sm-10>
                   <select v-model="course.level" class="form-control">
-                    <option v-for="o in COURSE_LEVEL" v-bind:value="o.key">{{o.value}}</option>
+                    <option v-for="o in COURSE_LEVEL" v-bind:value="o.key">{{ o.value }}</option>
                   </select>
                 </div>
               </div>
@@ -109,7 +109,7 @@
                 <label>charge</label>
                 <div col-sm-10>
                   <select v-model="course.charge" class="form-control">
-                    <option v-for="o in COURSE_CHARGE" v-bind:value="o.key">{{o.value}}</option>
+                    <option v-for="o in COURSE_CHARGE" v-bind:value="o.key">{{ o.value }}</option>
                   </select>
                 </div>
               </div>
@@ -117,7 +117,7 @@
                 <label>status</label>
                 <div col-sm-10>
                   <select v-model="course.status" class="form-control">
-                    <option v-for="o in COURSE_STATUS" v-bind:value="o.key">{{o.value}}</option>
+                    <option v-for="o in COURSE_STATUS" v-bind:value="o.key">{{ o.value }}</option>
                   </select>
                 </div>
               </div>
@@ -198,19 +198,19 @@ export default {
     save() {
       let _this = this;
       //validation
-      if(1 != 1
-        || !Validator.length(_this.course.name, "name", 1, 50)
-        || !Validator.require(_this.course.summary, "summary")
-        || !Validator.length(_this.course.summary, "summary", 1, 2000)
-        || !Validator.require(_this.course.time, "time")
-        || !Validator.require(_this.course.price, "price")
-        || !Validator.require(_this.course.image, "image")
-        || !Validator.length(_this.course.image, "image", 1, 100)
-        || !Validator.require(_this.course.level, "level")
-        || !Validator.require(_this.course.charge, "charge")
-        || !Validator.require(_this.course.status, "status")
-        || !Validator.require(_this.course.enroll, "enroll")
-        || !Validator.require(_this.course.sort, "sort")
+      if (1 != 1
+          || !Validator.length(_this.course.name, "name", 1, 50)
+          || !Validator.require(_this.course.summary, "summary")
+          || !Validator.length(_this.course.summary, "summary", 1, 2000)
+          || !Validator.require(_this.course.time, "time")
+          || !Validator.require(_this.course.price, "price")
+          || !Validator.require(_this.course.image, "image")
+          || !Validator.length(_this.course.image, "image", 1, 100)
+          || !Validator.require(_this.course.level, "level")
+          || !Validator.require(_this.course.charge, "charge")
+          || !Validator.require(_this.course.status, "status")
+          || !Validator.require(_this.course.enroll, "enroll")
+          || !Validator.require(_this.course.sort, "sort")
       ) {
         return;
       }
