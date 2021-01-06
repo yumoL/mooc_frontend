@@ -97,7 +97,7 @@
               <div class="form-group">
                 <label>parent</label>
                 <div col-sm-10>
-                  <p class="form-control">{{active.name || "no parent category"}}</p>
+                  <p class="form-control">{{ active.name || "no parent category" }}</p>
                 </div>
               </div>
               <div class="form-group">
@@ -162,9 +162,9 @@ export default {
     /**
      * add level2 category
      */
-    add2(){
+    add2() {
       let _this = this;
-      if(Tool.isEmpty(_this.active)){
+      if (Tool.isEmpty(_this.active)) {
         Toast.warning("Please choose a parent category first");
         return;
       }
@@ -206,6 +206,11 @@ export default {
                 }
               }
             }
+
+            _this.level2 = [];
+            setTimeout(function () {
+              $("tr.active").trigger("click");
+            }, 100)
           })
     },
 
