@@ -182,12 +182,15 @@ export default {
     add() {
       let _this = this;
       _this.course = {};
+      //do not check any category when add a new course
+      _this.tree.checkAllNodes(false);
       $("#form-modal").modal("show");
     },
 
     edit(course) {
       let _this = this;
       _this.course = $.extend({}, course);
+      _this.listCategory(course.id);
       $("#form-modal").modal("show");
     },
 
@@ -226,7 +229,7 @@ export default {
         return;
       }
       let categorys = _this.tree.getCheckedNodes();
-      if(Tool.isEmpty(categorys)){
+      if (Tool.isEmpty(categorys)) {
         Toast.warning("Please choose categories")
         return;
       }
@@ -304,6 +307,27 @@ export default {
 
       let zNodes = _this.categorys;
       _this.tree = $.fn.zTree.init($("#tree"), setting, zNodes);
+    },
+
+    /**
+     * list category of a course
+     * @param courseId
+     */
+    listCategory(courseId) {
+      let _this = this;
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/list-category/' + courseId).then((res) => {
+        Loading.hide();
+        let response = res.data;
+        let categorys = response.content;
+
+        //check categories when open editor modal
+        _this.tree.checkAllNodes(false);
+        for (let i = 0; i < categorys.length; i++) {
+          let node = _this.tree.getNodeByParam("id", categorys[i].categoryId);
+          _this.tree.checkNode(node, true);
+        }
+      })
     }
   }
 }
