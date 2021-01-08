@@ -166,6 +166,11 @@
             <form class="form-horizontal">
               <div class="form-group">
                 <div class="col-lg-12">
+                  {{saveContentLabel}}
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-12">
                   <div id="content"></div>
                 </div>
               </div>
@@ -196,6 +201,7 @@ export default {
       COURSE_STATUS: COURSE_STATUS,
       categorys: [],
       tree: {},
+      saveContentLabel: ""
     }
   },
   mounted: function () {
@@ -366,6 +372,8 @@ export default {
       })
       // clean old content
       $("#content").summernote("code", "");
+
+      _this.saveContentLabel = "";
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/find-content/' + id)
           .then((response) => {
@@ -376,6 +384,15 @@ export default {
               if (resp.content) {
                 $("#content").summernote('code', resp.content.content);
               }
+
+              //automatically save in every 5s
+              let saveContentInterval = setInterval(function(){
+                _this.saveContent();
+              }, 5000);
+              //clean automatically saving task when close modal
+              $("#course-content-modal").on("hidden.bs.modal", function(e){
+                clearInterval(saveContentInterval);
+              })
             } else {
               Toast.warning(resp.message);
             }
@@ -392,7 +409,8 @@ export default {
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
-          Toast.success("Content has been saved");
+          let now = Tool.dateFormat("hh:mm:ss");
+          _this.saveContentLabel = "Saved at " + now;
         } else {
           Toast.warning(resp.message);
         }
