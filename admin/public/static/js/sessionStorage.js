@@ -1,3 +1,6 @@
+SESSION_KEY_COURSE = "SESSION_KEY_COURSE"; //when jump to chapter from course page, save course
+SESSION_KEY_CHAPTER = "SESSION_KEY_CHAPTER"; //when jump to session from chapter page, save chapter
+
 SessionStorage = {
     get: function (key) {
         let v = sessionStorage.getItem(key);
