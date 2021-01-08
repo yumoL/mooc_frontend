@@ -48,6 +48,9 @@
               <button v-on:click="editContent(course)" class="btn btn-white btn-xs btn-info btn-round">
                 content
               </button>&nbsp;
+              <button v-on:click="editSort(course)" class="btn btn-white btn-xs btn-info btn-round">
+                sort
+              </button>&nbsp;
               <button v-on:click="edit(course)" class="btn btn-white btn-xs btn-info btn-round">
                 edit
               </button>&nbsp;
@@ -141,7 +144,7 @@
               <div class="form-group">
                 <label>sort</label>
                 <div col-sm-10>
-                  <input v-model="course.sort" class="form-control">
+                  <input v-model="course.sort" class="form-control" disabled>
                 </div>
               </div>
             </form>
@@ -166,7 +169,7 @@
             <form class="form-horizontal">
               <div class="form-group">
                 <div class="col-lg-12">
-                  {{saveContentLabel}}
+                  {{ saveContentLabel }}
                 </div>
               </div>
               <div class="form-group">
@@ -179,6 +182,38 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             <button v-on:click="saveContent()" type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="course-sort-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">edit sort</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label>Old sort</label>
+                <div class="col-lg-9">
+                  <input class="form-control" v-model="sort.oldSort" name="oldSort" disabled>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>New sort</label>
+                <div class="col-lg-9">
+                  <input class="form-control" v-model="sort.newSort" name="newSort">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button v-on:click="updateSort()" type="button" class="btn btn-primary">Save</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -201,7 +236,12 @@ export default {
       COURSE_STATUS: COURSE_STATUS,
       categorys: [],
       tree: {},
-      saveContentLabel: ""
+      saveContentLabel: "",
+      sort: {
+        id: "",
+        oldSort: 0,
+        newSort: 0
+      }
     }
   },
   mounted: function () {
@@ -214,6 +254,9 @@ export default {
     add() {
       let _this = this;
       _this.course = {};
+      _this.course = {
+        sort: _this.$refs.pagination.total + 1
+      }
       //do not check any category when add a new course
       _this.tree.checkAllNodes(false);
       $("#form-modal").modal("show");
@@ -250,12 +293,9 @@ export default {
           || !Validator.length(_this.course.summary, "summary", 1, 2000)
           || !Validator.require(_this.course.time, "time")
           || !Validator.require(_this.course.price, "price")
-          || !Validator.require(_this.course.image, "image")
-          || !Validator.length(_this.course.image, "image", 1, 100)
           || !Validator.require(_this.course.level, "level")
           || !Validator.require(_this.course.charge, "charge")
           || !Validator.require(_this.course.status, "status")
-          || !Validator.require(_this.course.enroll, "enroll")
           || !Validator.require(_this.course.sort, "sort")
       ) {
         return;
@@ -375,7 +415,7 @@ export default {
 
       _this.saveContentLabel = "";
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/find-content/' + id)
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/business/admin/course/find-content/' + id)
           .then((response) => {
             Loading.hide();
             let resp = response.data;
@@ -386,11 +426,11 @@ export default {
               }
 
               //automatically save in every 5s
-              let saveContentInterval = setInterval(function(){
+              let saveContentInterval = setInterval(function () {
                 _this.saveContent();
               }, 5000);
               //clean automatically saving task when close modal
-              $("#course-content-modal").on("hidden.bs.modal", function(e){
+              $("#course-content-modal").on("hidden.bs.modal", function (e) {
                 clearInterval(saveContentInterval);
               })
             } else {
@@ -415,6 +455,36 @@ export default {
           Toast.warning(resp.message);
         }
       })
+    },
+
+    editSort(course) {
+      let _this = this;
+      _this.sort = {
+        id: course.id,
+        oldSort: course.sort,
+        newSort: course.sort
+      };
+      $("#course-sort-modal").modal("show");
+    },
+
+    updateSort() {
+      let _this = this;
+      if (_this.sort.oldSort === _this.sort.newSort) {
+        Toast.warning("Sort stays the same");
+        return;
+      }
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/sort', _this.sort)
+          .then((response) => {
+            let resp = response.data;
+            if (resp.success) {
+              Toast.success("Sort has been updated");
+              $("#course-sort-modal").modal("hide");
+              _this.list(1);
+            } else {
+              Toast.error("Failed to update sort");
+            }
+          })
     }
   }
 }
