@@ -1,0 +1,4 @@
+/*center text in table*/
+.table td {
+    vertical-align: middle !important;
+}
