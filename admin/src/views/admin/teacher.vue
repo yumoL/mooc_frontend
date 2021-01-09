@@ -20,8 +20,9 @@
         <div>
         <span class="profile-picture">
           <img v-show="!teacher.image" class="editable img-responsive editable-click editable-empty"
-          src="/ace/assets/images/avatars/profile-pic.jpg" v-bind:title="teacher.intro">
-          <img v-show="teacher.image" class="editable img-responsive editable-click editable-empty" v-bind:src="teacher.image" v-bind:title="teacher.intro">
+               src="/ace/assets/images/avatars/profile-pic.jpg" v-bind:title="teacher.intro">
+          <img v-show="teacher.image" class="editable img-responsive editable-click editable-empty"
+               v-bind:src="teacher.image" v-bind:title="teacher.intro">
         </span>
 
           <div class="space-4"></div>
@@ -31,7 +32,7 @@
               <a href="javascript:;" class="user-title-label dropdown-toggle" data-toggle="dropdown">
                 <i class="ace-icon fa fa-circle light-green"></i>
                 &nbsp;
-                <span class="white">{{teacher.name}}</span>
+                <span class="white">{{ teacher.name }}</span>
               </a>
             </div>
           </div>
@@ -69,13 +70,13 @@
               <div class="form-group">
                 <label>image</label>
                 <div col-sm-10>
-                  <input v-model="teacher.image" class="form-control">
+                  <input type="file" v-on:change="uploadImage()" id="file-upload-input">
                 </div>
               </div>
               <div class="form-group">
                 <label>intro</label>
                 <div col-sm-10>
-                  <textarea v-model="teacher.intro" class="form-control" rows="5" />
+                  <textarea v-model="teacher.intro" class="form-control" rows="5"/>
                 </div>
               </div>
             </form>
@@ -179,6 +180,21 @@ export default {
               }
             })
       })
+    },
+
+    uploadImage() {
+      let _this = this;
+      let formData = new window.FormData();
+      //key: "file" should be the same as the parameter in controller of backend
+      formData.append("file", document.querySelector("#file-upload-input").files[0]);
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload',
+          formData
+      ).then((response) => {
+        Loading.hide();
+        let resp = response.data;
+      })
+
     }
   }
 }
