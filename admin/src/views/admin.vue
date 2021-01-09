@@ -417,20 +417,13 @@
                 </router-link>
                 <b class="arrow"></b>
               </li>
-<!--              <li class="active" id="business-chapter-sidebar">-->
-<!--                <router-link to="/business/chapter" class="dropdown-toggle">-->
-<!--                  <i class="menu-icon fa fa-caret-right"></i>-->
-<!--                  Chapter Management-->
-<!--                </router-link>-->
-<!--                <b class="arrow"></b>-->
-<!--              </li>-->
-<!--              <li class="active" id="business-section-sidebar">-->
-<!--                <router-link to="/business/section" class="dropdown-toggle">-->
-<!--                  <i class="menu-icon fa fa-caret-right"></i>-->
-<!--                  Section Management-->
-<!--                </router-link>-->
-<!--                <b class="arrow"></b>-->
-<!--              </li>-->
+              <li class="active" id="business-teacher-sidebar">
+                <router-link to="/business/teacher" class="dropdown-toggle">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  Teacher Management
+                </router-link>
+                <b class="arrow"></b>
+              </li>
             </ul>
           </li>
         </ul><!-- /.nav-list -->
