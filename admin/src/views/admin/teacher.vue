@@ -71,6 +71,7 @@
                 <label>image</label>
                 <div col-sm-10>
                   <input type="file" v-on:change="uploadImage()" id="file-upload-input">
+                  <img v-bind:src="teacher.image" class="img-responsive">
                 </div>
               </div>
               <div class="form-group">
@@ -193,6 +194,9 @@ export default {
       ).then((response) => {
         Loading.hide();
         let resp = response.data;
+        let image = resp.content;
+        console.log("avatar path", image);
+        _this.teacher.image = image;
       })
 
     }
