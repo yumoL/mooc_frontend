@@ -74,7 +74,7 @@
                     <i class="ace-icon fa fa-upload"></i>
                     upload avatar
                   </button>
-                  <input class="hidden" type="file" v-on:change="uploadImage()" id="file-upload-input">
+                  <input class="hidden" type="file" ref="file" v-on:change="uploadImage()" id="file-upload-input">
                   <div v-show="teacher.image" class="row">
                     <div class="col-md-4">
                       <img v-bind:src="teacher.image" class="img-responsive">
@@ -195,8 +195,26 @@ export default {
     uploadImage() {
       let _this = this;
       let formData = new window.FormData();
+      let file = _this.$refs.file.files[0];
+
+      // check file type
+      let suffixes = ["jpg", "jpeg", "png"];
+      let fileName = file.name;
+      let suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length).toLowerCase();
+      let validSuffix = false;
+      for (let i = 0; i < suffixes.length; i++) {
+        if (suffixes[i].toLowerCase() === suffix) {
+          validSuffix = true;
+          break;
+        }
+      }
+      if (!validSuffix) {
+        Toast.warning("invalid type, only allow " + suffixes);
+        return;
+      }
+
       //key: "file" should be the same as the parameter in controller of backend
-      formData.append("file", document.querySelector("#file-upload-input").files[0]);
+      formData.append("file", file);
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload',
           formData
@@ -206,7 +224,6 @@ export default {
         let image = resp.content;
         console.log("avatar path", image);
         _this.teacher.image = image;
-        console.log("teacher", _this.teacher)
       })
 
     },
