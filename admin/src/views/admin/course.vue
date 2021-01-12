@@ -89,9 +89,25 @@
               </div>
               <div class="form-group">
                 <label>name</label>
+                <input v-model="course.name" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>image</label>
                 <div col-sm-10>
-                  <input v-model="course.name" class="form-control">
+                  <div col-sm-10>
+                    <file v-bind:inputId="'image-upload'"
+                          v-bind:text="'upload cover'"
+                          v-bind:suffixes="['jpg','jpeg','png']"
+                          v-bind:use="FILE_USE.COURSE.key"
+                          v-bind:afterUpload="afterUpload"></file>
+                    <div v-show="course.image" class="row">
+                      <div class="col-md-6">
+                        <img v-bind:src="course.image" class="img-responsive">
+                      </div>
+                    </div>
+                  </div>
                 </div>
+
               </div>
               <div class="form-group">
                 <label>teacher</label>
@@ -117,12 +133,6 @@
                 <label>price</label>
                 <div col-sm-10>
                   <input v-model="course.price" class="form-control">
-                </div>
-              </div>
-              <div class="form-group">
-                <label>image</label>
-                <div col-sm-10>
-                  <input v-model="course.image" class="form-control">
                 </div>
               </div>
               <div class="form-group">
@@ -161,85 +171,86 @@
                   <input v-model="course.sort" class="form-control" disabled>
                 </div>
               </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button v-on:click="save()" type="button" class="btn btn-primary">Save</button>
+              </div>
             </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button v-on:click="save()" type="button" class="btn btn-primary">Save</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
 
-    <div id="course-content-modal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">edit content</h4>
-          </div>
-          <div class="modal-body">
-            <form class="form-horizontal">
-              <div class="form-group">
-                <div class="col-lg-12">
-                  {{ saveContentLabel }}
+      <div id="course-content-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">edit content</h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal">
+                <div class="form-group">
+                  <div class="col-lg-12">
+                    {{ saveContentLabel }}
+                  </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <div class="col-lg-12">
-                  <div id="content"></div>
+                <div class="form-group">
+                  <div class="col-lg-12">
+                    <div id="content"></div>
+                  </div>
                 </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button v-on:click="saveContent()" type="button" class="btn btn-primary">Save</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button v-on:click="saveContent()" type="button" class="btn btn-primary">Save</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
 
-    <div id="course-sort-modal" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">edit sort</h4>
-          </div>
-          <div class="modal-body">
-            <form class="form-horizontal">
-              <div class="form-group">
-                <label>Old sort</label>
-                <div class="col-lg-9">
-                  <input class="form-control" v-model="sort.oldSort" name="oldSort" disabled>
+      <div id="course-sort-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">edit sort</h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal">
+                <div class="form-group">
+                  <label>Old sort</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" v-model="sort.oldSort" name="oldSort" disabled>
+                  </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <label>New sort</label>
-                <div class="col-lg-9">
-                  <input class="form-control" v-model="sort.newSort" name="newSort">
+                <div class="form-group">
+                  <label>New sort</label>
+                  <div class="col-lg-9">
+                    <input class="form-control" v-model="sort.newSort" name="newSort">
+                  </div>
                 </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button v-on:click="updateSort()" type="button" class="btn btn-primary">Save</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button v-on:click="updateSort()" type="button" class="btn btn-primary">Save</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    </div>
   </div>
 </template>
 
 <script>
 import Pagination from "../../components/pagination";
+import File from "../../components/file";
 
 export default {
-  components: {Pagination},
+  components: {Pagination, File},
   name: "business-course",
   data: function () {
     return {
@@ -248,6 +259,7 @@ export default {
       COURSE_LEVEL: COURSE_LEVEL,
       COURSE_CHARGE: COURSE_CHARGE,
       COURSE_STATUS: COURSE_STATUS,
+      FILE_USE: FILE_USE,
       categorys: [],
       tree: {},
       saveContentLabel: "",
@@ -515,19 +527,28 @@ export default {
               Toast.error("Failed to update sort");
             }
           })
+    },
+
+    afterUpload(resp) {
+      let _this = this;
+      let image = resp.content.path;
+      _this.course.image = image;
     }
+
   }
 }
 </script>
 
 <style scoped>
+.caption h3 {
+  font-size: 20px;
+}
+
+#分辨率变小时缩小字体
+
+@media (max-width: 1199px) {
   .caption h3 {
-    font-size: 20px;
+    font-size: 16px;
   }
-  #分辨率变小时缩小字体
-  @media (max-width: 1199px){
-    .caption h3 {
-      font-size: 16px;
-    }
-  }
+}
 </style>
