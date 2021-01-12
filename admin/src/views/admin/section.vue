@@ -104,7 +104,7 @@
                         v-bind:afterUpload="afterUpload"></file>
                   <div v-show="section.video" class="row">
                     <div class="col-md-9">
-                      <video v-bind:src="section.video" controls="controls"></video>
+                      <video id="video" v-bind:src="section.video" controls="controls"></video>
                     </div>
                   </div>
                 </div>
@@ -253,6 +253,16 @@ export default {
       let _this = this;
       let video = resp.content.path;
       _this.section.video = video;
+      _this.getTime();
+    },
+
+    /**
+     * get video time
+     */
+    getTime() {
+      let _this = this;
+      let videoElement = document.getElementById("video");
+      _this.section.time = parseInt(videoElement.duration, 10);
     }
   }
 }
