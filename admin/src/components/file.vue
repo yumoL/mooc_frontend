@@ -21,6 +21,9 @@ export default {
     suffixes: {
       default: []
     },
+    use: {
+      default: ""
+    },
     afterUpload: {
       type: Function,
       default: null
@@ -55,6 +58,7 @@ export default {
 
       //key: "file" should be the same as the parameter in controller of backend
       formData.append("file", file);
+      formData.append("use", _this.use);
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload',
           formData

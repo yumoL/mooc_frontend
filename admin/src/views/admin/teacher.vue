@@ -73,6 +73,7 @@
                  <file v-bind:inputId="'image-upload'"
                        v-bind:text="'upload avatar'"
                        v-bind:suffixes="['jpg','jpeg','png']"
+                       v-bind:use="FILE_USE.TEACHER.key"
                        v-bind:afterUpload="afterUpload"></file>
                   <div v-show="teacher.image" class="row">
                     <div class="col-md-4">
@@ -113,6 +114,7 @@ export default {
     return {
       teacher: {}, //new chapter
       teachers: [],
+      FILE_USE: FILE_USE //first is variable inside the component, second is global component from js
     }
   },
   mounted: function () {
