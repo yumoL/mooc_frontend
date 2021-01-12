@@ -70,11 +70,10 @@
               <div class="form-group">
                 <label>image</label>
                 <div col-sm-10>
-                  <button type="button" v-on:click="selectImage()" class="btn btn-white btn-default btn-round">
-                    <i class="ace-icon fa fa-upload"></i>
-                    upload avatar
-                  </button>
-                  <input class="hidden" type="file" ref="file" v-on:change="uploadImage()" id="file-upload-input">
+                 <file v-bind:inputId="'image-upload'"
+                       v-bind:text="'upload avatar'"
+                       v-bind:suffixes="['jpg','jpeg','png']"
+                       v-bind:afterUpload="afterUpload"></file>
                   <div v-show="teacher.image" class="row">
                     <div class="col-md-4">
                       <img v-bind:src="teacher.image" class="img-responsive">
@@ -105,9 +104,10 @@
 
 <script>
 import Pagination from "../../components/pagination";
+import File from "../../components/file";
 
 export default {
-  components: {Pagination},
+  components: {Pagination, File},
   name: "business-teacher",
   data: function () {
     return {
@@ -192,45 +192,12 @@ export default {
       })
     },
 
-    uploadImage() {
+    afterUpload(resp){
       let _this = this;
-      let formData = new window.FormData();
-      let file = _this.$refs.file.files[0];
-
-      // check file type
-      let suffixes = ["jpg", "jpeg", "png"];
-      let fileName = file.name;
-      let suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length).toLowerCase();
-      let validSuffix = false;
-      for (let i = 0; i < suffixes.length; i++) {
-        if (suffixes[i].toLowerCase() === suffix) {
-          validSuffix = true;
-          break;
-        }
-      }
-      if (!validSuffix) {
-        Toast.warning("invalid type, only allow " + suffixes);
-        return;
-      }
-
-      //key: "file" should be the same as the parameter in controller of backend
-      formData.append("file", file);
-      Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload',
-          formData
-      ).then((response) => {
-        Loading.hide();
-        let resp = response.data;
-        let image = resp.content;
-        console.log("avatar path", image);
-        _this.teacher.image = image;
-      })
-
-    },
-
-    selectImage() {
-      $("#file-upload-input").trigger("click");
+      let image = resp.content;
+      _this.teacher.image = image;
     }
+
   }
 }
 </script>
