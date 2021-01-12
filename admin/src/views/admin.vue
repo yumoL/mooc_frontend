@@ -426,6 +426,27 @@
               </li>
             </ul>
           </li>
+
+          <li class="active open">
+            <a href="#" class="dropdown-toggle">
+              <i class="menu-icon fa fa-desktop"></i>
+              <span class="menu-text">
+								File Management
+							</span>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+              <li class="active" id="file-file-sidebar">
+                <router-link to="/file/file">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  File Management
+                </router-link>
+              </li>
+
+            </ul>
+          </li>
         </ul><!-- /.nav-list -->
 
         <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
@@ -518,6 +539,7 @@ export default {
       //if parent level, remove other active from the same level of the parent level
       let parentLi = $("#" + id).parents("li");
       if(parentLi){
+        console.log("parentli", parentLi)
         parentLi.siblings().removeClass("open active");
         parentLi.addClass("open active");
       }
