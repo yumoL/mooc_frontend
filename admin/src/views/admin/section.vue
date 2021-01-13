@@ -253,6 +253,8 @@ export default {
       let _this = this;
       let video = resp.content.path;
       _this.section.video = video;
+      //强制触发渲染
+      _this.$forceUpdate()
       _this.getTime();
     },
 

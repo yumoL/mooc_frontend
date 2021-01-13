@@ -57,12 +57,13 @@ export default {
       }
 
       //split file into shards
-      let shardSize = 2 * 1024 * 1024; //size of a single shard is 20MB
+      let shardSize = 600 * 1024; //size of a single shard is 300kB
       let shardIndex = 0; // index of the shard
       // start and point of the shard
       let start = shardSize * shardIndex;
-      let end = Math.min(file.size, start+shardSize);
+      let end = Math.min(file.size, start + shardSize);
       let fileShard = file.slice(start, end);
+      console.log("shard", fileShard)
 
       //key: "file" should be the same as the parameter in controller of backend
       formData.append("file", fileShard);
