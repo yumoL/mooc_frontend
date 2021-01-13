@@ -51,7 +51,7 @@
               <button v-on:click="toChapter(course)" class="btn btn-white btn-xs btn-info btn-round">
                 chapter
               </button>&nbsp;
-              <button v-on:click="editContent(course)" class="btn btn-white btn-xs btn-info btn-round">
+              <button v-on:click="toContent(course)" class="btn btn-white btn-xs btn-info btn-round">
                 content
               </button>&nbsp;
               <button v-on:click="editSort(course)" class="btn btn-white btn-xs btn-info btn-round">
@@ -180,65 +180,6 @@
         </div><!-- /.modal-dialog -->
       </div><!-- /.modal -->
     </div>
-
-    <div id="course-content-modal" class="modal fade" tabindex="-1" role="dialog" style="overflow: auto">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">edit content</h4>
-          </div>
-          <div class="modal-body">
-            <file v-bind:input-id="'content-file-upload'"
-                  v-bind:text="'upload files for content'"
-                  v-bind:suffixes="['jpg','jpeg','png','mp4']"
-                  v-bind:use="FILE_USE.COURSE.key"
-                  v-bind:after-upload="afterUploadContentFile"></file>
-            <br>
-            <table id="file-table" class="table table-bordered table-hover">
-              <thead>
-              <tr>
-                <th>name</th>
-                <th>url</th>
-                <th>size</th>
-                <th>operation</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="(f,i) in contentFiles" v-bind:key="f.id">
-                <td>{{ f.name }}</td>
-                <td>{{ f.url }}</td>
-                <td>{{ f.size|formatFileSize }}</td>
-                <td>
-                  <button v-on:click="delFile(f)" class="btn btn-white btn-xs btn-warning btn-round">
-                    <i class="ace-icon fa fa-times red2"></i>
-                    delete
-                  </button>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            <form class="form-horizontal">
-              <div class="form-group">
-                <div class="col-lg-12">
-                  {{ saveContentLabel }}
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-lg-12">
-                  <div id="content"></div>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button v-on:click="saveContent()" type="button" class="btn btn-primary">Save</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
     <div id="course-sort-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -282,7 +223,7 @@ export default {
   name: "business-course",
   data: function () {
     return {
-      course: {}, //new chapter
+      course: {},
       courses: [],
       COURSE_LEVEL: COURSE_LEVEL,
       COURSE_CHARGE: COURSE_CHARGE,
@@ -473,64 +414,6 @@ export default {
       })
     },
 
-    editContent(course) {
-      let _this = this;
-      let id = course.id;
-      _this.course = course;
-      $("#content").summernote({
-        focus: true,
-        height: 300
-      })
-      // clean old content
-      $("#content").summernote("code", "");
-
-      // get files for the content
-      _this.listContentFiles();
-
-      _this.saveContentLabel = "";
-      Loading.show();
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/business/admin/course/find-content/' + id)
-          .then((response) => {
-            Loading.hide();
-            let resp = response.data;
-            if (resp.success) {
-              $("#course-content-modal").modal({backdrop: 'static', keyboard: false});
-              if (resp.content) {
-                $("#content").summernote('code', resp.content.content);
-              }
-
-              //automatically save in every 5s
-              let saveContentInterval = setInterval(function () {
-                _this.saveContent();
-              }, 5000);
-              //clean automatically saving task when close modal
-              $("#course-content-modal").on("hidden.bs.modal", function (e) {
-                clearInterval(saveContentInterval);
-              })
-            } else {
-              Toast.warning(resp.message);
-            }
-          })
-    },
-
-    saveContent() {
-      let _this = this;
-      let content = $("#content").summernote("code");
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/save-content', {
-        id: _this.course.id,
-        content: content
-      }).then((response) => {
-        Loading.hide();
-        let resp = response.data;
-        if (resp.success) {
-          let now = Tool.dateFormat("hh:mm:ss");
-          _this.saveContentLabel = "Saved at " + now;
-        } else {
-          Toast.warning(resp.message);
-        }
-      })
-    },
-
     editSort(course) {
       let _this = this;
       _this.sort = {
@@ -567,45 +450,11 @@ export default {
       _this.course.image = image;
     },
 
-    listContentFiles() {
+    toContent(course) {
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + "/business/admin/course-content-file/list/" + _this.course.id)
-          .then((response) => {
-            let resp = response.data;
-            if (resp.success) {
-              _this.contentFiles = resp.content;
-            }
-          })
-    },
-
-    afterUploadContentFile(resp) {
-      let _this = this;
-      let file = resp.content;
-      file.courseId = _this.course.id;
-      file.url = file.path;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + "/business/admin/course-content-file/save", file)
-          .then((response) => {
-            let resp = response.data;
-            if (resp.success) {
-              Toast.success("File was uploaded")
-              _this.contentFiles.push(resp.content);
-            }
-          })
-    },
-
-    delFile(file) {
-      let _this = this;
-      Confirm.show("File cannot be reverted after deletion, sure to delete?", function () {
-        _this.$ajax.delete(process.env.VUE_APP_SERVER + "/business/admin/course-content-file/delete/" + file.id)
-            .then((response) => {
-              let resp = response.data;
-              if (resp.success) {
-                Toast.success("File was deleted");
-                Tool.removeObj(_this.contentFiles, file);
-              }
-            })
-      })
-    },
+      SessionStorage.set(SESSION_KEY_COURSE, course);
+      _this.$router.push("/business/content");
+    }
 
   }
 }
