@@ -57,17 +57,24 @@ export default {
       }
 
       //split file into shards
-      let shardSize = 600 * 1024; //size of a single shard is 300kB
+      let shardSize = 600 * 1024; //size of a single shard is 600kB
       let shardIndex = 0; // index of the shard
       // start and point of the shard
       let start = shardSize * shardIndex;
-      let end = Math.min(file.size, start + shardSize);
+      let size = file.size; //size of the whole file
+      let end = Math.min(size, start + shardSize);
       let fileShard = file.slice(start, end);
-      console.log("shard", fileShard)
+      let shardTotal = Math.ceil(size / shardSize);
 
-      //key: "file" should be the same as the parameter in controller of backend
-      formData.append("file", fileShard);
+      //key: "shard" should be the same as the parameter in controller of backend
+      formData.append("shard", fileShard);
+      formData.append("shardIndex", shardIndex);
+      formData.append("shardSize", shardSize);
+      formData.append("shardTotal", shardTotal);
       formData.append("use", _this.use);
+      formData.append("name", file.name);
+      formData.append("suffix", suffix);
+      formData.append("size", size);
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload',
           formData
