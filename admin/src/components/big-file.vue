@@ -39,6 +39,12 @@ export default {
       let formData = new window.FormData();
       let file = _this.$refs.file.files[0];
 
+      //generate key according to file info, the key should be always the same
+      // as long as file does not change
+      let key = hex_md5(file);
+      let key10 = parseInt(key, 16); //parse from hexadecimal to decimal
+      let key62 = Tool._10to62(key10); //use base 62 to make key shorter
+
       // check file type
       let suffixes = _this.suffixes;
       let fileName = file.name;
@@ -57,7 +63,7 @@ export default {
       }
 
       //split file into shards
-      let shardSize = 600 * 1024; //size of a single shard is 600kB
+      let shardSize = 100 * 1024; //size of a single shard is 600kB
       let shardIndex = 0; // index of the shard
       // start and point of the shard
       let start = shardSize * shardIndex;
@@ -75,6 +81,7 @@ export default {
       formData.append("name", file.name);
       formData.append("suffix", suffix);
       formData.append("size", size);
+      formData.append("key", key62);
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload',
           formData
